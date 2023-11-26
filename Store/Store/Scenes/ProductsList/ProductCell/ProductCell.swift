@@ -13,7 +13,7 @@ protocol ProductCellDelegate: AnyObject {
 }
 
 class ProductCell: UITableViewCell {
-
+    
     @IBOutlet weak var prodImageView: UIImageView!
     @IBOutlet weak var prodTitleLbl: UILabel!
     @IBOutlet weak var stockLbl: UILabel!
@@ -22,13 +22,16 @@ class ProductCell: UITableViewCell {
     @IBOutlet weak var selectedQuantityLbl: UILabel!
     @IBOutlet weak var quantityModifierView: UIView!
     
+    @IBOutlet weak var plus: UIButton!
+    @IBOutlet weak var minus: UIButton!
+    
     weak var delegate: ProductCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
@@ -38,10 +41,14 @@ class ProductCell: UITableViewCell {
         quantityModifierView.layer.cornerRadius = 5
         quantityModifierView.layer.borderWidth = 1
         quantityModifierView.layer.borderColor = UIColor.lightGray.cgColor
+        minus.isUserInteractionEnabled = true
+        plus.isUserInteractionEnabled = true
     }
     
     func reload(with product: ProductModel) {
         //TODO: reload images are not correct when reloading list after changing quantity
+        prodImageView.image = UIImage(named: "placeholderImage")
+        
         setImage(from: product.thumbnail)
         prodTitleLbl.text = product.title
         stockLbl.text = "\(product.stock)"

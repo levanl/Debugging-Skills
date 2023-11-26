@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -48,7 +48,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ap-WV-yzt">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ap-WV-yzt">
                         <rect key="frame" x="200" y="90" width="100" height="30"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGa-xQ-d3X">
@@ -75,6 +75,9 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
                         <constraints>
                             <constraint firstItem="Gyo-z0-fac" firstAttribute="leading" secondItem="3Ap-WV-yzt" secondAttribute="leading" id="J0e-ZU-VLF"/>
                             <constraint firstItem="0Pe-YC-oEl" firstAttribute="centerY" secondItem="Gyo-z0-fac" secondAttribute="centerY" id="Kev-pg-fbb"/>
@@ -94,7 +97,6 @@
                     <constraint firstItem="27b-TL-fNp" firstAttribute="leading" secondItem="Rjp-sP-3kE" secondAttribute="leading" id="GJz-vG-KSO"/>
                     <constraint firstAttribute="trailing" secondItem="Rjp-sP-3kE" secondAttribute="trailing" constant="20" id="GrB-ym-tRA"/>
                     <constraint firstItem="Ian-ho-xAk" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="L3g-MK-Kuh"/>
-                    <constraint firstAttribute="bottom" secondItem="Ian-ho-xAk" secondAttribute="bottom" constant="20" id="LJE-Of-3Vo"/>
                     <constraint firstAttribute="trailing" secondItem="3Ap-WV-yzt" secondAttribute="trailing" constant="20" id="TIs-ff-2RN"/>
                     <constraint firstItem="El7-4Y-eR0" firstAttribute="top" secondItem="27b-TL-fNp" secondAttribute="bottom" constant="4" id="aml-2A-17O"/>
                     <constraint firstItem="Rjp-sP-3kE" firstAttribute="top" secondItem="Ian-ho-xAk" secondAttribute="top" id="cZC-Kh-OrM"/>
@@ -107,6 +109,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="descrLbl" destination="27b-TL-fNp" id="UwY-qk-RIN"/>
+                <outlet property="minus" destination="Gyo-z0-fac" id="5ki-22-nH9"/>
+                <outlet property="plus" destination="yGa-xQ-d3X" id="oYf-DZ-VOL"/>
                 <outlet property="priceLbl" destination="dV9-dg-Leu" id="Ec6-Sj-aix"/>
                 <outlet property="prodImageView" destination="Ian-ho-xAk" id="Rbr-22-wWh"/>
                 <outlet property="prodTitleLbl" destination="Rjp-sP-3kE" id="eeQ-NU-O3W"/>

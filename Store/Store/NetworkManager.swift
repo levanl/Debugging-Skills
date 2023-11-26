@@ -28,6 +28,14 @@ final class NetworkManager {
                 completion(.failure(error))
                 return
             }
+    
+            // Added httpResponse guard to ensure that the request was successful
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200..<300).contains(httpResponse.statusCode) else {
+                print("failed")
+                completion(.failure(NSError(domain: "", code: -3, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response"])))
+                return
+            }
             
             guard let data else {
                 completion(.failure(NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
@@ -36,9 +44,14 @@ final class NetworkManager {
             
             do {
                 let productsResponse = try JSONDecoder().decode(ProductResponseModel.self, from: data)
-                completion(.success(productsResponse.products))
+                DispatchQueue.main.async {
+                    completion(.success(productsResponse.products))
+                }
             } catch {
-                completion(.failure(error))
+                print("Error decoding data: \(error)")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }.resume()
     }
@@ -56,11 +69,15 @@ final class NetworkManager {
                 error == nil,
                 let image = UIImage(data: data)
             else {
-                completion(nil)
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
                 return
             }
             
-            completion(image)
+            DispatchQueue.main.async {
+                completion(image)
+            }
         }.resume()
     }
 }

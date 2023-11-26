@@ -10,7 +10,7 @@ import UIKit
 class ProductsListViewController: UIViewController {
     
     private let productsTableView: UITableView = {
-       let tableView = UITableView()
+        let tableView = UITableView()
         tableView.backgroundColor = .purple
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -35,7 +35,7 @@ class ProductsListViewController: UIViewController {
     }()
     
     private let productsViewModel = ProductsListViewModel()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -63,6 +63,8 @@ class ProductsListViewController: UIViewController {
         ])
         
         productsTableView.register(UINib(nibName: "ProductCell", bundle: nil), forCellReuseIdentifier: "ProductCell")
+        productsTableView.dataSource = self
+        productsTableView.delegate = self
     }
     
     func setupIndicator() {
@@ -94,46 +96,61 @@ class ProductsListViewController: UIViewController {
 extension ProductsListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        return productsViewModel.products?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard 
+        guard
             let currentProduct = productsViewModel.products?[indexPath.row],
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as? ProductCell
         else {
             return UITableViewCell()
         }
         cell.delegate = self
+        cell.selectionStyle = .none
         cell.reload(with: currentProduct)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
 }
 
 extension ProductsListViewController: ProductsListViewModelDelegate {
     
     func productsAmountChanged() {
-        totalPriceLbl.text = "Total price: \(productsViewModel.totalPrice ?? 0)"
+        
+        if let totalPrice = productsViewModel.totalPrice {
+            totalPriceLbl.text = "Total Price: \(totalPrice)$"
+        } else {
+            totalPriceLbl.text = "Total Price: N/A"
+        }
+        productsTableView.reloadData()
     }
     
     func productsFetched() {
-        self.activityIndicator.stopAnimating()
-        self.productsTableView.reloadData()
+        // UI Updates need to be async and on the main thread
+        DispatchQueue.main.async { [weak self] in
+            self?.activityIndicator.stopAnimating()
+            self?.productsTableView.reloadData()
+        }
     }
+    
 }
 
 extension ProductsListViewController: ProductCellDelegate {
     
     func removeProduct(for cell: ProductCell) {
         if let indexPath = productsTableView.indexPath(for: cell) {
-            productsViewModel.removeProduct(at: indexPath.row + 1)
+            productsViewModel.removeProduct(at: indexPath.row)
         }
     }
     
     func addProduct(for cell: ProductCell) {
         if let indexPath = productsTableView.indexPath(for: cell) {
-            productsViewModel.addProduct(at: indexPath.row + 1)
+            productsViewModel.addProduct(at: indexPath.row)
         }
     }
 }

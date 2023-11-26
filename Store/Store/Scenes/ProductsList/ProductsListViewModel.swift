@@ -13,7 +13,7 @@ protocol ProductsListViewModelDelegate: AnyObject {
 }
 
 class ProductsListViewModel {
-
+    
     weak var delegate: ProductsListViewModelDelegate?
     
     var products: [ProductModel]?
@@ -31,22 +31,44 @@ class ProductsListViewModel {
                 self?.delegate?.productsFetched()
             case .failure(let error):
                 //TODO: handle Error
+                self?.handleFetchError(error)
                 break
             }
         }
     }
     
-    func addProduct(at index: Int) {
-        var product = products?[index]
-        //TODO: handle if products are out of stock
-        product?.selectedAmount = (products?[index].selectedAmount ?? 0 ) + 1
-        delegate?.productsAmountChanged()
+    private func handleFetchError(_ error: Error) {
+        print("Error fetching products: \(error.localizedDescription)")
     }
     
+    func addProduct(at index: Int) {
+        //TODO: handle if products are out of stock
+        guard var product = products?[index] else {
+            return
+        }
+        
+        if product.stock > 0 {
+            product.selectedAmount = (product.selectedAmount ?? 0) + 1
+            product.stock -= 1
+            products?[index] = product
+            delegate?.productsAmountChanged()
+        } else {
+            print("Product is out of stock")
+        }
+    }
+    
+    
     func removeProduct(at index: Int) {
-        var product = products?[index]
         //TODO: handle if selected quantity of product is already 0
-        product?.selectedAmount = (products?[index].selectedAmount ?? 0 ) - 1
-        delegate?.productsAmountChanged()
+        guard var product = products?[index], let selectedAmount = product.selectedAmount else {
+            return
+        }
+        
+        if selectedAmount > 0 {
+            product.selectedAmount = selectedAmount - 1
+            product.stock += 1
+            products?[index] = product
+            delegate?.productsAmountChanged()
+        }
     }
 }
