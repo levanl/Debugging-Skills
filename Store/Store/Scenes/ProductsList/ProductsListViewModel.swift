@@ -42,32 +42,33 @@ class ProductsListViewModel {
     }
     
     func addProduct(at index: Int) {
-        //TODO: handle if products are out of stock
         guard var product = products?[index] else {
             return
         }
-        
+
+        //TODO: handle if products are out of stock
         if product.stock > 0 {
+            products?[index] = product
             product.selectedAmount = (product.selectedAmount ?? 0) + 1
             product.stock -= 1
-            products?[index] = product
             delegate?.productsAmountChanged()
         } else {
-            print("Product is out of stock")
+            print("Out of stock")
         }
     }
     
     
     func removeProduct(at index: Int) {
-        //TODO: handle if selected quantity of product is already 0
+        
         guard var product = products?[index], let selectedAmount = product.selectedAmount else {
             return
         }
         
+        //TODO: handle if selected quantity of product is already 0
         if selectedAmount > 0 {
+            products?[index] = product
             product.selectedAmount = selectedAmount - 1
             product.stock += 1
-            products?[index] = product
             delegate?.productsAmountChanged()
         }
     }
